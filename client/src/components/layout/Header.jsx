@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ChatContext } from "../../context/ChatContext";
 
 const Header = () => {
-  return <div className="p-5 text-xl border-b">Chat App</div>;
+  const { currentRoom } = useContext(ChatContext);
+
+  return (
+    <div className="bg-white border-b px-4 py-3 flex items-center justify-between">
+      <div>
+        <h1 className="text-lg font-semibold">#{currentRoom}</h1>
+        <p className="text-sm text-gray-500">Chat Room</p>
+      </div>
+    </div>
+  );
 };
 
 export default Header;

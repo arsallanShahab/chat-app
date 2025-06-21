@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
 
 const UserList = () => {
-  const { users, currentRoom } = useContext(ChatContext);
+  const { users } = useContext(ChatContext);
 
   if (!users || users.length === 0) {
     return <div className="text-sm text-gray-400 py-2">No users online</div>;
