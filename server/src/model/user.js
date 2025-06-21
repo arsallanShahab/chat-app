@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
         message:
           "Username can only contain letters, numbers, hyphens, and underscores",
       },
+      index: true,
     },
     isOnline: { type: Boolean, default: false },
     lastSeen: { type: Date, default: Date.now },
@@ -47,7 +48,6 @@ function validateUsername(username) {
   );
 }
 
-userSchema.index({ username: 1 });
 userSchema.index({ isOnline: 1 });
 
 const User = mongoose.model("User", userSchema);
