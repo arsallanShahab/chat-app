@@ -63,7 +63,6 @@ mongoose
     serverSelectionTimeoutMS: 15000,
     socketTimeoutMS: 60000,
     connectTimeoutMS: 30000,
-    keepAlive: true,
     keepAliveInitialDelay: 300000,
   })
   .catch((err) => {
