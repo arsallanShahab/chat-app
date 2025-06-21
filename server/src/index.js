@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const compression = require("compression");
 const morgan = require("morgan");
@@ -31,18 +30,6 @@ const app = express();
 const server = http.createServer(app);
 
 app.set("trust proxy", 1);
-
-// security middleware
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        connectSrc: ["'self'", "ws:", "wss:"],
-      },
-    },
-  })
-);
 
 // rate limiting
 const limiter = rateLimit({
