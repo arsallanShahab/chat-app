@@ -91,7 +91,13 @@ The server will start on `http://localhost:3001`.
    npm install
    ```
 
-3. Start the development server:
+3. Create a `.env` file in the client directory with the following variables:
+
+   ```env
+   VITE_WS_URL=ws://localhost:3001
+   ```
+
+4. Start the development server:
 
    ```bash
    pnpm dev
@@ -159,18 +165,18 @@ The server keeps track of connections and room membership in memory for optimal 
 
 Instead of using third-party state management libraries like Redux, the application leverages React's Context API, which provides sufficient capabilities for a chat application while keeping the bundle size smaller.
 
-<!-- ## Deployed Application
+## Deployed Application
 
 The application is deployed at:
 
-- Frontend: [https://chat-app-example.com](https://chat-app-example.com)
-- Backend: [https://api.chat-app-example.com](https://api.chat-app-example.com)
+- Frontend: [https://chat-app-arsallan.vercel.app](https://chat-app-arsallan.vercel.app)
+- Backend: [https://chat-app-tezf.onrender.com](https://chat-app-tezf.onrender.com)
 
 To use the deployed application:
 
-1. Navigate to [https://chat-app-example.com](https://chat-app-example.com)
+1. Navigate to [https://chat-app-arsallan.vercel.app](https://chat-app-arsallan.vercel.app)
 2. Enter a username to join the chat
-3. Start chatting in the default "general" room or create new rooms -->
+3. Start chatting in the default "general" room or create new rooms
 
 ## API Documentation
 
@@ -191,7 +197,6 @@ To use the deployed application:
 ### REST Endpoints
 
 - `GET /health` - Server health check
-- `GET /api/stats` - Server statistics
 
 ## License
 
