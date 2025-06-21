@@ -57,11 +57,19 @@ app.use(
   })
 );
 
-mongoose.connect(config.mongoUri, {
-  maxPoolSize: 10,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-});
+mongoose
+  .connect(config.mongoUri, {
+    maxPoolSize: 10,
+    serverSelectionTimeoutMS: 15000,
+    socketTimeoutMS: 60000,
+    connectTimeoutMS: 30000,
+    keepAlive: true,
+    keepAliveInitialDelay: 300000,
+  })
+  .catch((err) => {
+    console.error("Initial MongoDB connection error:", err);
+    logger.error("Initial MongoDB connection error:", err);
+  });
 
 mongoose.connection.on("connected", () => {
   logger.info("Connected to MongoDB");
