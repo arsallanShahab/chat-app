@@ -27,14 +27,14 @@ const ChatPage = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-white w-full">
       <Sidebar />
 
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div className="flex flex-col flex-1 overflow-hidden w-full">
         <Header />
 
-        <div className="flex-1 overflow-hidden flex flex-col">
-          <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-hidden flex flex-col w-full">
+          <div className="flex-1 overflow-y-auto p-4 overflow-x-hidden">
             <ChatList />
           </div>
 

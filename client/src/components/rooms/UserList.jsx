@@ -1,23 +1,21 @@
 import React, { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
+import { Badge } from "../ui/badge";
 
 const UserList = () => {
   const { users } = useContext(ChatContext);
 
   if (!users || users.length === 0) {
-    return <div className="text-sm text-gray-400 py-2">No users online</div>;
+    return <Badge>No users online</Badge>;
   }
 
   return (
-    <div className="space-y-1">
+    <div className="flex items-center justify-start flex-wrap gap-2">
       {users.map((user) => (
-        <div
-          key={user.username}
-          className="flex items-center px-3 py-2 rounded hover:bg-gray-700 text-sm"
-        >
+        <Badge key={user.username}>
           <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
           <span className="truncate">{user.username}</span>
-        </div>
+        </Badge>
       ))}
     </div>
   );

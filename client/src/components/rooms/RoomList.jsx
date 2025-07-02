@@ -9,8 +9,8 @@ const RoomList = ({ rooms, currentRoom, onRoomSelect }) => {
           onClick={() => onRoomSelect(room)}
           className={`w-full text-left px-3 py-2 rounded text-sm flex items-center ${
             currentRoom === room
-              ? "bg-white text-indigo-500"
-              : "hover:bg-gray-700 text-gray-300"
+              ? "bg-indigo-200 text-indigo-600 hover:bg-indigo-100"
+              : "text-zinc-800 hover:bg-gray-100"
           }`}
         >
           <span className="mr-2">#</span>

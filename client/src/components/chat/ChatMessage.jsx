@@ -1,69 +1,102 @@
+import { motion } from "motion/react";
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { ChatContext } from "../../context/ChatContext";
-import { formatDate } from "../../utils/dateFormatter";
+import { Badge } from "../ui/badge";
 
 const ChatMessage = ({ message }) => {
-  const { setReplyTo } = useContext(ChatContext);
   const { currentUser } = useContext(AuthContext);
+  const { setReplyTo } = useContext(ChatContext);
 
-  const isCurrentUser = message.username === currentUser?.username;
+  const isOwnMessage = message.username === currentUser?.username;
 
   const handleReply = () => {
     setReplyTo({
-      _id: message.id || message._id,
+      id: message.id || message._id,
       username: message.username,
       message: message.message,
     });
   };
 
   return (
-    <div
-      className={`flex mb-4 ${isCurrentUser ? "justify-end" : "justify-start"}`}
+    <motion.div
+      initial={{ opacity: 0, y: 10, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      whileHover={{
+        x: isOwnMessage ? -5 : 5,
+      }}
+      transition={{ duration: 0.2 }}
+      className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}
     >
-      <div
-        className={`max-w-[75%] ${
-          isCurrentUser ? "bg-blue-100" : "bg-gray-100"
-        } rounded-lg p-3`}
+      <motion.div
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        className={`max-w-xs lg:max-w-md pl-3 pr-2 py-2 rounded-lg ${
+          isOwnMessage ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+        }`}
       >
-        {!isCurrentUser && (
-          <div className="font-bold text-blue-700">{message.username}</div>
+        {!isOwnMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="text-xs font-semibold mb-1"
+          >
+            {message.username}
+          </motion.div>
         )}
 
         {message.replyTo && (
-          <div className="mb-2 pl-2 border-l-2 border-gray-400 text-gray-600 text-sm">
-            <div className="font-medium">{message.replyTo.username}</div>
-            <div className="truncate">{message.replyTo.message}</div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15 }}
+            className="text-xs opacity-70 border-l-2 border-gray-400 pl-2 pr-4 py-1 mb-2"
+          >
+            Replying to {message.replyTo.username}: {message.replyTo.message}
+          </motion.div>
         )}
 
-        <div className="break-words">{message.message}</div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-sm lg:text-base break-words"
+        >
+          {message.message}
+        </motion.div>
 
-        <div className="text-xs text-gray-500 mt-1 flex justify-between items-center">
-          <span>{formatDate(message.createdAt)}</span>
-
-          <button
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-xs opacity-70 mt-1 flex justify-between items-center"
+        >
+          <span>
+            {new Date(message.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleReply}
-            className="text-gray-500 hover:text-blue-600 ml-2"
+            className="ml-2 hover:underline"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-3.5 w-3.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <Badge
+              className={
+                isOwnMessage
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-300 text-gray-800 hover:bg-gray-400"
+              }
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+              Reply
+            </Badge>
+          </motion.button>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 

@@ -6,6 +6,10 @@ import { WebSocketContext } from "../../context/WebSocketContext";
 import { cn } from "../../utils/cn.js";
 import RoomList from "../rooms/RoomList.jsx";
 import UserList from "../rooms/UserList.jsx";
+import { Badge } from "../ui/badge.jsx";
+import { Input } from "../ui/input.jsx";
+import { Label } from "../ui/label.jsx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs.jsx";
 
 const Sidebar = () => {
   const [newRoomName, setNewRoomName] = useState("");
@@ -65,14 +69,14 @@ const Sidebar = () => {
 
   return (
     <>
-      <button
+      <Badge
         id="sidebar-toggle"
         onClick={toggleSidebar}
-        className="md:hidden fixed top-4 right-4 z-30 p-2 rounded-md bg-indigo-500 text-white"
+        className="md:hidden fixed top-4 right-4 z-30 p-2 rounded-md bg-zinc-800 text-white"
         aria-label="Toggle sidebar"
       >
         {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
-      </button>
+      </Badge>
 
       {isMobileOpen && (
         <div
@@ -84,99 +88,82 @@ const Sidebar = () => {
       <div
         id="sidebar"
         className={cn(
-          "bg-indigo-500 text-white flex flex-col h-full z-30 md:flex md:static md:w-72",
+          "bg-white p-3 flex flex-col gap-4 h-full z-30 border-r md:flex md:static md:w-72 duration-300",
 
-          isMobileOpen ? "fixed left-0 top-0 bottom-0 w-72" : "hidden"
+          isMobileOpen
+            ? "fixed left-0 top-0 bottom-0 w-80 translate-x-0"
+            : "fixed -translate-x-full md:translate-x-0"
         )}
       >
-        <div className="flex flex-col gap-2.5 p-4 border-b border-gray-700">
+        <div className="flex justify-between items-center gap-2.5 p-3 bg-zinc-100 text-zinc-900 border rounded-xl">
           <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-white border text-zinc-900 flex items-center justify-center">
               {currentUser?.username.charAt(0).toUpperCase()}
             </div>
             <div>
               <div className="font-medium">{currentUser?.username}</div>
-              <div className="text-xs text-green-400">Online</div>
+              <div className="text-xs text-green-600">Online</div>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="ml-auto bg-red-500 hover:bg-red-600 text-white text-xs font-medium py-1 px-2 rounded"
-          >
+          <Badge onClick={handleLogout} variant={"destructive"}>
             Logout
-          </button>
+          </Badge>
         </div>
 
-        <div className="flex border-b border-gray-700">
-          <button
-            className={`flex-1 py-2 text-center ${
-              activeTab === "rooms" ? "bg-gray-700" : "hover:bg-gray-700"
-            }`}
-            onClick={() => setActiveTab("rooms")}
-          >
-            Rooms
-          </button>
-          <button
-            className={`flex-1 py-2 text-center ${
-              activeTab === "users" ? "bg-gray-700" : "hover:bg-gray-700"
-            }`}
-            onClick={() => setActiveTab("users")}
-          >
-            Users
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto">
-          {activeTab === "rooms" ? (
-            <div className="p-4">
-              <h3 className="text-sm font-medium text-zinc-200 mb-2">
-                Available Rooms
-              </h3>
+        <Tabs defaultValue="rooms" className="w-full">
+          <TabsList className="w-full rounded-3xl">
+            <TabsTrigger value="rooms" className="flex-1 rounded-3xl">
+              Rooms
+            </TabsTrigger>
+            <TabsTrigger value="users" className="flex-1 rounded-3xl">
+              Users
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="rooms">
+            <div className="p-2.5 bg-zinc-100 rounded-xl border">
+              {" "}
+              <Label>Available Rooms</Label>
               <RoomList
                 rooms={rooms}
                 currentRoom={currentRoom}
                 onRoomSelect={handleRoomSwitch}
               />
-
               <form
                 onSubmit={handleCreateRoom}
-                className="mt-4 pt-4 border-t border-gray-700"
+                className="p-3 bg-zinc-200 rounded-xl mt-4 flex flex-col gap-3"
               >
-                <h3 className="text-sm font-medium text-gray-400 mb-2">
-                  Create New Room
-                </h3>
-                <div className="flex">
-                  <input
+                <Label>Create New Room</Label>
+                <div className="flex w-full">
+                  <Input
                     type="text"
                     value={newRoomName}
                     onChange={(e) => setNewRoomName(e.target.value)}
                     placeholder="Room name"
-                    className="flex-1 bg-white text-indigo-500 px-2 py-1 rounded-l outline-none text-sm"
+                    className="flex-1 bg-white text-indigo-500 px-2 py-1 rounded-l-lg outline-none text-sm rounded-r-none"
                   />
-                  <button
+                  <Badge
                     type="submit"
                     disabled={!newRoomName.trim()}
-                    className={`bg-blue-400 text-white px-3 py-1 rounded-r text-sm
-                      ${
-                        !newRoomName.trim()
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:bg-blue-700"
-                      }`}
+                    className={cn(
+                      "rounded-l-none rounded-r-lg",
+                      !newRoomName.trim()
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-blue-700"
+                    )}
                   >
                     Create
-                  </button>
+                  </Badge>
                 </div>
               </form>
             </div>
-          ) : (
-            <div className="p-4">
-              <h3 className="text-sm font-medium text-gray-400 mb-2">
-                Online Users in #{currentRoom}
-              </h3>
+          </TabsContent>
+          <TabsContent value="users">
+            <div className="p-2.5 bg-zinc-100 rounded-xl border flex flex-col gap-3">
+              <Label className="text-sm">Online Users in #{currentRoom}</Label>
               <UserList />
             </div>
-          )}
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );
